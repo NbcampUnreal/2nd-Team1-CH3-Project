@@ -1,0 +1,24 @@
+{
+	"version": 1,
+	"changelists": [
+		{
+			"guid": "00000000000000000000000000000000",
+			"description": "Default Uncontrolled Changelist",
+			"files": [
+				"C:/Users/USER/Documents/Unreal Projects/CH3_TeamProject/Content/Maps/NewMap.umap",
+				"C:/Users/USER/Documents/Unreal Projects/CH3_TeamProject/Content/Inputs/IMC_Character.uasset",
+				"C:/Users/USER/Documents/Unreal Projects/CH3_TeamProject/Content/Inputs/IA_Sit.uasset",
+				"C:/Users/USER/Documents/Unreal Projects/CH3_TeamProject/Content/BP/BP_MyGameMode.uasset",
+				"C:/Users/USER/Documents/Unreal Projects/CH3_TeamProject/Content/BP/BP_MyCharacter.uasset",
+				"C:/Users/USER/Documents/Unreal Projects/CH3_TeamProject/Content/BP/BP_MyPlayerController.uasset",
+				"C:/Users/USER/Documents/Unreal Projects/CH3_TeamProject/Content/IMC/Move.uasset",
+				"C:/Users/USER/Documents/Unreal Projects/CH3_TeamProject/Content/IMC/Jump.uasset",
+				"C:/Users/USER/Documents/Unreal Projects/CH3_TeamProject/Content/IMC/IA_Jump.uasset",
+				"C:/Users/USER/Documents/Unreal Projects/CH3_TeamProject/Content/IMC/IA_Move.uasset",
+				"C:/Users/USER/Documents/Unreal Projects/CH3_TeamProject/Content/IMC/IA_Sit.uasset",
+				"C:/Users/USER/Documents/Unreal Projects/CH3_TeamProject/Content/IMC/IA_Sprint.uasset",
+				"C:/Users/USER/Documents/Unreal Projects/CH3_TeamProject/Content/IMC/NewInputMappingContext.uasset"
+			]
+		}
+	]
+}

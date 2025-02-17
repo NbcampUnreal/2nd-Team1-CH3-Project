@@ -1,0 +1,20 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UnrealEditor-CH3_TeamProject-0016.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"C:\Users\USER\Documents\Unreal Projects\CH3_TeamProject\Intermediate\Build\Win64\x64\CH3_TeamProjectEditor\Development\UnrealEd\SharedPCH.UnrealEd.Project.ValApi.Cpp20.h.obj"
+"C:\Users\USER\Documents\Unreal Projects\CH3_TeamProject\Intermediate\Build\Win64\x64\UnrealEditor\Development\CH3_TeamProject\CH3_TeamProject.init.gen.cpp.obj"
+"C:\Users\USER\Documents\Unreal Projects\CH3_TeamProject\Intermediate\Build\Win64\x64\UnrealEditor\Development\CH3_TeamProject\MyCharacter.gen.cpp.obj"
+"C:\Users\USER\Documents\Unreal Projects\CH3_TeamProject\Intermediate\Build\Win64\x64\UnrealEditor\Development\CH3_TeamProject\MyGameMode.gen.cpp.obj"
+"C:\Users\USER\Documents\Unreal Projects\CH3_TeamProject\Intermediate\Build\Win64\x64\UnrealEditor\Development\CH3_TeamProject\MyGameModeBase.gen.cpp.obj"
+"C:\Users\USER\Documents\Unreal Projects\CH3_TeamProject\Intermediate\Build\Win64\x64\UnrealEditor\Development\CH3_TeamProject\CH3_TeamProject.cpp.obj"
+"C:\Users\USER\Documents\Unreal Projects\CH3_TeamProject\Intermediate\Build\Win64\x64\UnrealEditor\Development\CH3_TeamProject\MyCharacter.cpp.obj"
+"C:\Users\USER\Documents\Unreal Projects\CH3_TeamProject\Intermediate\Build\Win64\x64\UnrealEditor\Development\CH3_TeamProject\MyGameMode.cpp.obj"
+"C:\Users\USER\Documents\Unreal Projects\CH3_TeamProject\Intermediate\Build\Win64\x64\UnrealEditor\Development\CH3_TeamProject\MyGameModeBase.cpp.obj"
+"C:\Users\USER\Documents\Unreal Projects\CH3_TeamProject\Intermediate\Build\Win64\x64\UnrealEditor\Development\CH3_TeamProject\PerModuleInline.gen.cpp.obj"
+"C:\Users\USER\Documents\Unreal Projects\CH3_TeamProject\Intermediate\Build\Win64\x64\UnrealEditor\Development\CH3_TeamProject\Default.rc2.res"
+/OUT:"C:\Users\USER\Documents\Unreal Projects\CH3_TeamProject\Intermediate\Build\Win64\x64\UnrealEditor\Development\CH3_TeamProject\UnrealEditor-CH3_TeamProject-0016.lib"
