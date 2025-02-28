@@ -15,6 +15,8 @@ class CH3_TEAMPROJECT_API AMyPlayerController : public APlayerController
 public:
 	AMyPlayerController();
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
+	USkeletalMeshComponent* Mesh1P;
 	// IMC
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	UInputMappingContext* InputMappingContext;
@@ -29,6 +31,8 @@ public:
 	UInputAction* SitAction;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	UInputAction* SprintAction;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	UInputAction* ReloadAction;
 
 	virtual void BeginPlay() override;
 };

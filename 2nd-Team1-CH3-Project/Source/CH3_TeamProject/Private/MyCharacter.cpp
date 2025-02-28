@@ -1,4 +1,6 @@
 #include "MyCharacter.h"
+#include "WeaponComponent.h"
+#include "WeaponStaticMeshComponent.h"
 #include "MyPlayerController.h"
 #include "EnhancedInputComponent.h"
 #include "Camera/CameraComponent.h"
@@ -17,6 +19,13 @@ AMyCharacter::AMyCharacter()
 	CameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	CameraComp->SetupAttachment(SpringArmComp); //, USpringArmComponent::SocketName);
 	CameraComp->bUsePawnControlRotation = false;
+
+	Mesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh1P"));
+	Mesh1P->SetOnlyOwnerSee(true);
+	Mesh1P->SetupAttachment(CameraComp);
+	Mesh1P->bCastDynamicShadow = false;
+	Mesh1P->CastShadow = false;
+	Mesh1P->SetRelativeLocation(FVector(-30.f, 0.f, -150.f));
 
 	NormalSpeed = 600.0f;
 	SprintSpeedMultiplier = 1.6f;
@@ -116,6 +125,16 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 					&AMyCharacter::StopSprint
 				);
 			}
+			//Reload
+			//if (PlayerController->ReloadAction)
+			//{
+			//	EnhancedInput->BindAction(
+			//		PlayerController->ReloadAction,
+			//		ETriggerEvent::Triggered,
+			//		this,
+			//		&AMyCharacter::ReloadWeapon
+			//	);
+			//}
 		}
 	}
 }
@@ -190,3 +209,11 @@ void AMyCharacter::StopSprint(const FInputActionValue& value)
 		GetCharacterMovement()->MaxWalkSpeed = NormalSpeed;
 	}
 }
+
+//void AMyCharacter::ReloadWeapon()
+//{
+//	if ()
+//	{
+//		Reload(); // 재장전 호출
+//	}
+//}

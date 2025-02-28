@@ -4,11 +4,14 @@
 #include "GameFramework/Character.h"
 #include "MyCharacter.generated.h"
 
+class AWeapon;
 class USpringArmComponent;
 class UCameraComponent;
 struct FInputActionValue;
 
-UCLASS()
+DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
+
+UCLASS(config = Game)
 class CH3_TEAMPROJECT_API AMyCharacter : public ACharacter
 {
 	GENERATED_BODY()
@@ -33,6 +36,9 @@ protected:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
+	USkeletalMeshComponent* Mesh1P;
+
 	UFUNCTION()
 	void Move(const FInputActionValue& value);
 	UFUNCTION()
@@ -52,4 +58,14 @@ protected:
 
 public:	
 	virtual void Tick(float DeltaTime) override;
+
+	void OnWeaponOverlap(AWeapon* Weapon);
+	//void ReloadWeapon();
+
+	USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
+	/** Returns FirstPersonCameraComponent subobject **/
+	UCameraComponent* GetFirstPersonCameraComponent() const { return CameraComp; }
+
+private:
+	AWeapon* CurrentWeapon;
 };
