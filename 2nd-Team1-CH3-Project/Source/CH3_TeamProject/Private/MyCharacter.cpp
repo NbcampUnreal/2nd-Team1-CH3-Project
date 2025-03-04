@@ -32,6 +32,7 @@ AMyCharacter::AMyCharacter()
 	SprintSpeed = NormalSpeed * SprintSpeedMultiplier;
 
 	GetCharacterMovement()->MaxWalkSpeed = NormalSpeed;
+	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
 }
 
 void AMyCharacter::BeginPlay()
@@ -184,14 +185,14 @@ void AMyCharacter::StartSit(const FInputActionValue& value)
 {
 	if (value.Get<bool>())
 	{
-		
+		Crouch();
 	}
 }
 void AMyCharacter::StopSit(const FInputActionValue& value)
 {
 	if (!value.Get<bool>())
 	{
-		
+		UnCrouch();
 	}
 }
 
