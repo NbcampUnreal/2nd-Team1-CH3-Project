@@ -186,6 +186,7 @@ void AMyCharacter::StartSit(const FInputActionValue& value)
 	if (value.Get<bool>())
 	{
 		Crouch();
+		bIsCronching = true;
 	}
 }
 void AMyCharacter::StopSit(const FInputActionValue& value)
@@ -193,6 +194,7 @@ void AMyCharacter::StopSit(const FInputActionValue& value)
 	if (!value.Get<bool>())
 	{
 		UnCrouch();
+		bIsCronching = false;
 	}
 }
 
