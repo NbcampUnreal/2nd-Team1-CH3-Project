@@ -34,5 +34,26 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	UInputAction* ReloadAction;
 
+	//UI
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TSubclassOf<UUserWidget> HUDWidgetClass;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "HUD")
+	UUserWidget* HUDWidgetInstance;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TSubclassOf<UUserWidget> MainMenuWidgetClass;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI")
+	UUserWidget* MainMenuWidgetInstance;
+
+	UFUNCTION(BlueprintPure, Category = "HUD")
+	UUserWidget* GetHUDWidget() const;
+	UFUNCTION(BlueprintPure, Category = "UI")
+	UUserWidget* GetMainMenuWidget() const;
+	UFUNCTION(BlueprintCallable, Category = "HUD")
+	void ShowGameHUD();
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	void ShowMainMenu(bool bIsRestart);
+	UFUNCTION(BlueprintCallable, Category = "Level")
+	void StartGame();
+
 	virtual void BeginPlay() override;
 };
