@@ -19,7 +19,7 @@ AMyGameStateBase::AMyGameStateBase()
 	CurrentWaveIndex = 0;
 	MaxWaveIndex = 0;
 	CurrentLevelIndex = 0;
-	MaxLevelIndex = 0;
+	MaxLevelIndex = 1;
 	GateIndex = 0;
 	bIsGameOver = false;
 }
