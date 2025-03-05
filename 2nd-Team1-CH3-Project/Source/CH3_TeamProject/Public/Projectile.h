@@ -25,5 +25,7 @@ public:
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 	USphereComponent* GetCollisionComp() const { return CollisionComp; }
-	UProjectileMovementComponent* GetProjectileMovement() const { return ProjectileMovement; }
+	UProjectileMovementComponent* GetProjectileMovement() const { return ProjectileMovement; 
+	
+	}
 };

@@ -10,11 +10,16 @@
 #include "Engine/LocalPlayer.h"
 #include "Engine/World.h"
 #include "TimerManager.h"
+#include "InputAction.h"
+#include "Engine/Engine.h"
 
 UWeaponStaticMeshComponent::UWeaponStaticMeshComponent()
 {
-	MuzzleOffset = FVector(100.0f, 0.0f, 10.0f);
-	//FireRate = 0.5f;
+	MuzzleOffset = FVector(0.0f, 0.0f, 20.0f);
+	MaxAmmo = 30;
+	CurrentAmmo = MaxAmmo;
+	FireRate = 0.1f;
+	bIsFiring = false;
 }
 
 void UWeaponStaticMeshComponent::Fire()
@@ -24,10 +29,12 @@ void UWeaponStaticMeshComponent::Fire()
 		return;
 	}
 
-	//if (GetWorld()->GetTimerManager().IsTimerActive(FireTimerHandle))
-	//{
-	//	return;
-	//}
+	if (CurrentAmmo <= 0) // 탄창 확인
+	{
+		//UE_LOG(LogTemp, Warning, TEXT("Out of ammo!"));
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("out of ammo!"));
+		return;
+	}
 
 	if (ProjectileClass != nullptr)
 	{
@@ -45,6 +52,8 @@ void UWeaponStaticMeshComponent::Fire()
 		}
 	}
 
+	CurrentAmmo--;
+
 	if (FireSound != nullptr)
 	{
 		UGameplayStatics::PlaySoundAtLocation(this, FireSound, Character->GetActorLocation());
@@ -59,43 +68,84 @@ void UWeaponStaticMeshComponent::Fire()
 		}
 	}
 
-	//GetWorld()->GetTimerManager().SetTimer(FireTimerHandle, this, &UWeaponStaticMeshComponent::ResetFire, FireRate, false);
-
 }
 
-//void UWeaponStaticMeshComponent::ResetFire()
-//{
-//	GetWorld()->GetTimerManager().ClearTimer(FireTimerHandle);
-//}
-
+void UWeaponStaticMeshComponent::Reload()
+{
+	if (CurrentAmmo < MaxAmmo)
+	{
+		CurrentAmmo = MaxAmmo;
+		//UE_LOG(LogTemp, Warning, TEXT("Reloading..."));
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Reloading..."));
+	}
+}
 
 bool UWeaponStaticMeshComponent::AttachWeapon(AMyCharacter* TargetCharacter)
 {
-	Character = TargetCharacter;
-
-	if (Character == nullptr || Character->GetInstanceComponents().FindItemByClass<UWeaponStaticMeshComponent>())
+	if (!TargetCharacter)
 	{
+		UE_LOG(LogTemp, Error, TEXT("TargetCharacter is null!"));
 		return false;
 	}
 
+	Character = TargetCharacter;
+
+	// PlayerController
+	APlayerController* PlayerController = Cast<APlayerController>(Character->GetController());
+	if (!PlayerController)
+	{
+		UE_LOG(LogTemp, Error, TEXT("PlayerController is null!"));
+		return false;
+	}
+
+	// EnhancedInputComponent
+	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerController->InputComponent))
+	{
+		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &UWeaponStaticMeshComponent::StartFiring);
+		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Completed, this, &UWeaponStaticMeshComponent::StopFiring);
+		EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Triggered, this, &UWeaponStaticMeshComponent::Reload);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("EnhancedInputComponent is null!"));
+		return false;
+	}
+
+	// 무기 메시
+	if (Character->GetInstanceComponents().FindItemByClass<UWeaponStaticMeshComponent>())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Weapon already attached!"));
+		return false;
+	}
+
+	// 무기 장착
 	FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
 	AttachToComponent(Character->GetMesh1P(), AttachmentRules, FName(TEXT("GripPoint")));
 
-	if (APlayerController* PlayerController = Cast<APlayerController>(Character->GetController()))
+	// IMC
+	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 	{
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
-		{
-			Subsystem->AddMappingContext(FireMappingContext, 1);
-		}
-
-		if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerController->InputComponent))
-		{
-			EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &UWeaponStaticMeshComponent::Fire);
-		}
+		Subsystem->AddMappingContext(FireMappingContext, 1);
 	}
 
 	return true;
 }
+
+void UWeaponStaticMeshComponent::StartFiring()
+{
+	if (bIsFiring) return; // 발사 중 중복 발사 금지
+	bIsFiring = true;
+	Fire();
+	GetWorld()->GetTimerManager().SetTimer(FireTimerHandle, this, &UWeaponStaticMeshComponent::Fire, FireRate, true); // 발사 타이머 설정
+}
+
+// 발사 중지 함수
+void UWeaponStaticMeshComponent::StopFiring()
+{
+	bIsFiring = false;
+	GetWorld()->GetTimerManager().ClearTimer(FireTimerHandle);
+}
+
 
 void UWeaponStaticMeshComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {

@@ -30,6 +30,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* FireAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* ReloadAction;
+
 	UWeaponStaticMeshComponent();
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
@@ -37,19 +40,21 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	void Fire();
-
-	//UFUNCTION()
-	//void ResetFire();
+	void StartFiring();
+	void StopFiring();
+	void Reload();
 
 protected:
 	UFUNCTION()
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
+	int32 CurrentAmmo;
+	int32 MaxAmmo;
+
 private:
 	AMyCharacter* Character;
 
-	//UPROPERTY(EditDefaultsOnly, Category = "Weapon")
-	//float FireRate;
-
-	//FTimerHandle FireTimerHandle;
+	FTimerHandle FireTimerHandle;
+	float FireRate;
+	bool bIsFiring;
 };
