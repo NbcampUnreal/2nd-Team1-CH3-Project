@@ -100,7 +100,7 @@ void AEnemyCharacter::OnHandOverlap(
 		ACharacter* Player = Cast<ACharacter>(OtherActor);
 		if (Player && Player->IsA(AMyCharacter::StaticClass()) && !IsPlayerHit)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Hit"));
+			//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Hit"));
 			IsPlayerHit = true;
 			UGameplayStatics::ApplyDamage(Player, 20.0f, GetController(), this, UDamageType::StaticClass());
 		}

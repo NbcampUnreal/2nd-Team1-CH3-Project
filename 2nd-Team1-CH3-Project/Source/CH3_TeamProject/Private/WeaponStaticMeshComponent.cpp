@@ -36,7 +36,7 @@ void UWeaponStaticMeshComponent::Fire()
 	if (CurrentAmmo <= 0) // ÅºÃ¢ È®ÀÎ
 	{
 		//UE_LOG(LogTemp, Warning, TEXT("Out of ammo!"));
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("out of ammo!"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("out of ammo!"));
 		return;
 	}
 
@@ -70,9 +70,9 @@ void UWeaponStaticMeshComponent::Fire()
 		{
 			FRotator CameraRotation = PlayerController->PlayerCameraManager->GetCameraRotation();
 
-			FVector ForwardOffset = CameraRotation.Vector() * 40.0f;
-			FVector RightOffset = FRotationMatrix(CameraRotation).GetUnitAxis(EAxis::X) * 100.0f;
-			FVector UpwardOffset = FRotationMatrix(CameraRotation).GetUnitAxis(EAxis::Y) * 10.0f;
+			FVector ForwardOffset = CameraRotation.Vector() * 20.0f;
+			FVector RightOffset = FRotationMatrix(CameraRotation).GetUnitAxis(EAxis::X) * 50.0f;
+			FVector UpwardOffset = FRotationMatrix(CameraRotation).GetUnitAxis(EAxis::Y);// * -10.0f;
 
 			FVector MuzzleLocation = GetOwner()->GetActorLocation() + CameraRotation.RotateVector(MuzzleOffset) + ForwardOffset + RightOffset + UpwardOffset;
 			FRotator MuzzleRotation = CameraRotation;
@@ -101,7 +101,7 @@ void UWeaponStaticMeshComponent::Reload()
 {
 	if (CurrentAmmo >= MaxAmmo)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Ammo is Already Full"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Ammo is Already Full"));
 	}
 
 
@@ -109,7 +109,7 @@ void UWeaponStaticMeshComponent::Reload()
 	{
 		bIsReloading = true;
 		//UE_LOG(LogTemp, Warning, TEXT("Reloading..."));
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Reloading..."));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Reloading..."));
 
 		GetWorld()->GetTimerManager().SetTimer(ReloadTimerHandle, this, &UWeaponStaticMeshComponent::CompleteReload, ReloadTime, false);
 	}
@@ -119,7 +119,7 @@ void UWeaponStaticMeshComponent::CompleteReload()
 {
 	CurrentAmmo = MaxAmmo;
 	bIsReloading = false;
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Reload Complete"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Reload Complete"));
 }
 
 bool UWeaponStaticMeshComponent::AttachWeapon(AMyCharacter* TargetCharacter)

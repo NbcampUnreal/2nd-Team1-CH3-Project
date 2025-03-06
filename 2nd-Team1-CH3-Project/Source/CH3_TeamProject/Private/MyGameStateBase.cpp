@@ -250,7 +250,7 @@ void AMyGameStateBase::UpdateHUD()
 
 				if (UTextBlock* KillCountText = Cast<UTextBlock>(HUDWidget->GetWidgetFromName(TEXT("EnemyCountText"))))
 				{
-					KillCountText->SetText(FText::FromString(FString::Printf(TEXT("Enemy Left: %d / %d"), DeadEnemyCount, SpawnedEnemyCount)));
+					KillCountText->SetText(FText::FromString(FString::Printf(TEXT("Enemy Killed: %d"), DeadEnemyCount)));
 				}
 
 				if (UTextBlock* LevelIndexText = Cast<UTextBlock>(HUDWidget->GetWidgetFromName(TEXT("LevelText"))))

@@ -67,7 +67,7 @@ void ASpawnVolume::SpawnEnemies()
             WaveTimerHandle,
             this,
             &ASpawnVolume::SpawnEnemies,
-            10.0f,
+            5.0f,
             false
         );
     }
