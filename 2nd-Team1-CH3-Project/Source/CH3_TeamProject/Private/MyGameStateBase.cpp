@@ -9,6 +9,7 @@
 #include "MyPlayerController.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/TextBlock.h"
+#include "EnemyCharacter.h"
 
 AMyGameStateBase::AMyGameStateBase()
 {
@@ -26,11 +27,11 @@ AMyGameStateBase::AMyGameStateBase()
 
 void AMyGameStateBase::BeginPlay()
 {
-	/*TArray<AActor*> FoundActors;
+	TArray<AActor*> FoundActors;
 
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnemy::StaticClass, FoundActors);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnemyCharacter::StaticClass(), FoundActors);
 
-	SpawnedEnemyCount = FoundActors.Num();*/
+	SpawnedEnemyCount = FoundActors.Num();
 
 	StartLevel();
 
@@ -70,23 +71,14 @@ void AMyGameStateBase::AddScore(int32 Amount)
 	}
 }
 
-void AMyGameStateBase::AddKillCount(FString EnemyType)
+void AMyGameStateBase::AddKillCount()
 {
 	if (UGameInstance* GameInstance = GetGameInstance())
 	{
 		UMyGameInstance* MyGameInstance = Cast<UMyGameInstance>(GameInstance);
 		if (MyGameInstance)
 		{
-			if (EnemyType == "Zombie")
-			{
-				MyGameInstance->AddToKillCount("Zombie");
-			}
-
-			if (EnemyType == "Soldier")
-			{
-				MyGameInstance->AddToKillCount("Soldier");
-			}
-
+			MyGameInstance->AddToKillCount();
 		}
 	}
 }
@@ -210,7 +202,7 @@ void AMyGameStateBase::StartWave()
 
 void AMyGameStateBase::EndWave()
 {
-	GetWorldTimerManager().ClearTimer(WaveTimerHandle);
+	/*GetWorldTimerManager().ClearTimer(WaveTimerHandle);
 	CurrentWaveIndex++;
 
 	if (CurrentWaveIndex >= MaxWaveIndex)
@@ -221,29 +213,18 @@ void AMyGameStateBase::EndWave()
 	if (CurrentWaveIndex < MaxWaveIndex)
 	{
 		StartWave();
-	}
+	}*/
 }
 
 void AMyGameStateBase::OnWaveTimeUp()
 {
-	EndWave();
+	/*EndWave();*/
 }
 
-void AMyGameStateBase::OnEnemyDead(TArray<FName> EnemyType)
+void AMyGameStateBase::OnEnemyDead()
 {
 	DeadEnemyCount++;
-
-	if (EnemyType.Contains("Zombie"))
-	{
-		Score += 10;
-		AddKillCount("Zombie");
-	}
-
-	if (EnemyType.Contains("Soldier"))
-	{
-		Score += 25;
-		AddKillCount("Soldier");
-	}
+	AddKillCount();
 }
 
 void AMyGameStateBase::UpdateHUD()
@@ -276,11 +257,6 @@ void AMyGameStateBase::UpdateHUD()
 				{
 					LevelIndexText->SetText(FText::FromString(FString::Printf(TEXT("Level: %d"), CurrentLevelIndex + 1)));
 				}
-
-				if (UTextBlock* WaveIndexText = Cast<UTextBlock>(HUDWidget->GetWidgetFromName(TEXT("Wave"))))
-				{
-					WaveIndexText->SetText(FText::FromString(FString::Printf(TEXT("Wave: %d"), CurrentWaveIndex + 1)));
-				}
 			}
 		}
 	}
@@ -294,17 +270,6 @@ void AMyGameStateBase::UpdateMainMenu()
 		{
 			if (UUserWidget* MainMenuWidget = MyPlayerController->GetMainMenuWidget())
 			{
-				if (UTextBlock* TotalScoreText = Cast<UTextBlock>(MainMenuWidget->GetWidgetFromName(TEXT("TotalScoreText"))))
-				{
-					if (UGameInstance* GameInstance = GetGameInstance())
-					{
-						UMyGameInstance* MyGameInstance = Cast<UMyGameInstance>(GameInstance);
-						if (MyGameInstance)
-						{
-							TotalScoreText->SetText(FText::FromString(FString::Printf(TEXT("Total Score: %d"), MyGameInstance->TotalScore)));
-						}
-					}
-				}
 
 				if (UTextBlock* TotalKillCountText = Cast<UTextBlock>(MainMenuWidget->GetWidgetFromName(TEXT("TotalKillCountText"))))
 				{
@@ -317,30 +282,7 @@ void AMyGameStateBase::UpdateMainMenu()
 						}
 					}
 				}
-
-				if (UTextBlock* ZomibeKillCountText = Cast<UTextBlock>(MainMenuWidget->GetWidgetFromName(TEXT("ZomibeKillCountText"))))
-				{
-					if (UGameInstance* GameInstance = GetGameInstance())
-					{
-						UMyGameInstance* MyGameInstance = Cast<UMyGameInstance>(GameInstance);
-						if (MyGameInstance)
-						{
-							ZomibeKillCountText->SetText(FText::FromString(FString::Printf(TEXT("Killed Zombies: %d"), MyGameInstance->ZombieKillCount)));
-						}
-					}
-				}
-
-				if (UTextBlock* SoldierKillCountText = Cast<UTextBlock>(MainMenuWidget->GetWidgetFromName(TEXT("SoldierKillCountText"))))
-				{
-					if (UGameInstance* GameInstance = GetGameInstance())
-					{
-						UMyGameInstance* MyGameInstance = Cast<UMyGameInstance>(GameInstance);
-						if (MyGameInstance)
-						{
-							SoldierKillCountText->SetText(FText::FromString(FString::Printf(TEXT("Killed Soldiers: %d"), MyGameInstance->SoldierKillCount)));
-						}
-					}
-				}
+				
 			}
 		}
 	}

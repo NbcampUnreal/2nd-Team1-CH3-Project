@@ -56,7 +56,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Score")
 	void AddScore(int32 Amount);
 	UFUNCTION(BlueprintCallable, Category = "Score")
-	void AddKillCount(FString EnemyType);
+	void AddKillCount();
 	UFUNCTION(BlueprintCallable, Category = "Level")
 	void OnGameOver();
 	UFUNCTION(BlueprintCallable, Category = "Level")
@@ -69,7 +69,7 @@ public:
 	void EndWave();
 
 	void OnWaveTimeUp();
-	void OnEnemyDead(TArray<FName> EnemyType);
+	void OnEnemyDead();
 	void UpdateHUD();
 	void UpdateMainMenu();
 };

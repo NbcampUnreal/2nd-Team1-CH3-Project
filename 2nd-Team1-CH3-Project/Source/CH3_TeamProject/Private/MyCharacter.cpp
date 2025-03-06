@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "HealthComponent.h"
 
 AMyCharacter::AMyCharacter()
 {
@@ -33,6 +34,8 @@ AMyCharacter::AMyCharacter()
 
 	GetCharacterMovement()->MaxWalkSpeed = NormalSpeed;
 	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
+
+	HealthComp = CreateDefaultSubobject<UHealthComponent>(TEXT("Health"));
 }
 
 void AMyCharacter::BeginPlay()

@@ -31,7 +31,9 @@ public:
     FTimerHandle WaveTimerHandle;
 
     FVector GetRandomPointInVolume() const;
+    UFUNCTION(BlueprintCallable, Category = "Enemy")
     AActor* SpawnEnemy();
+    UFUNCTION(BlueprintCallable, Category = "Enemy")
     void SpawnEnemies();
 protected:
     virtual void BeginPlay() override;
