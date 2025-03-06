@@ -20,10 +20,14 @@ UWeaponStaticMeshComponent::UWeaponStaticMeshComponent()
 	CurrentAmmo = MaxAmmo;
 	FireRate = 0.1f;
 	bIsFiring = false;
+	ReloadTime = 2.0f;
+	bIsReloading = false;
 }
 
 void UWeaponStaticMeshComponent::Fire()
 {
+	if (bIsReloading) return;
+
 	if (Character == nullptr || Character->GetController() == nullptr)
 	{
 		return;
@@ -61,23 +65,61 @@ void UWeaponStaticMeshComponent::Fire()
 
 	if (FireAnimation != nullptr)
 	{
-		UAnimInstance* AnimInstance = Character->GetMesh1P()->GetAnimInstance();
-		if (AnimInstance != nullptr)
+		APlayerController* PlayerController = Cast<APlayerController>(Character->GetController());
+		if (PlayerController)
 		{
-			AnimInstance->Montage_Play(FireAnimation, 1.f);
+			FRotator CameraRotation = PlayerController->PlayerCameraManager->GetCameraRotation();
+
+			FVector ForwardOffset = CameraRotation.Vector() * 40.0f;
+			FVector RightOffset = FRotationMatrix(CameraRotation).GetUnitAxis(EAxis::X) * 100.0f;
+			FVector UpwardOffset = FRotationMatrix(CameraRotation).GetUnitAxis(EAxis::Y) * 10.0f;
+
+			FVector MuzzleLocation = GetOwner()->GetActorLocation() + CameraRotation.RotateVector(MuzzleOffset) + ForwardOffset + RightOffset + UpwardOffset;
+			FRotator MuzzleRotation = CameraRotation;
+
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), FireAnimation, MuzzleLocation, MuzzleRotation);
 		}
 	}
+}
 
+void UWeaponStaticMeshComponent::StartFiring()
+{
+	if (bIsFiring) return; // 발사 중 중복 발사 금지
+	bIsFiring = true;
+	Fire();
+	GetWorld()->GetTimerManager().SetTimer(FireTimerHandle, this, &UWeaponStaticMeshComponent::Fire, FireRate, true); // 발사 타이머 설정
+}
+
+// 발사 중지 함수
+void UWeaponStaticMeshComponent::StopFiring()
+{
+	bIsFiring = false;
+	GetWorld()->GetTimerManager().ClearTimer(FireTimerHandle);
 }
 
 void UWeaponStaticMeshComponent::Reload()
 {
-	if (CurrentAmmo < MaxAmmo)
+	if (CurrentAmmo >= MaxAmmo)
 	{
-		CurrentAmmo = MaxAmmo;
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Ammo is Already Full"));
+	}
+
+
+	if (bIsReloading || CurrentAmmo >= MaxAmmo) return;
+	{
+		bIsReloading = true;
 		//UE_LOG(LogTemp, Warning, TEXT("Reloading..."));
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Reloading..."));
+
+		GetWorld()->GetTimerManager().SetTimer(ReloadTimerHandle, this, &UWeaponStaticMeshComponent::CompleteReload, ReloadTime, false);
 	}
+}
+
+void UWeaponStaticMeshComponent::CompleteReload()
+{
+	CurrentAmmo = MaxAmmo;
+	bIsReloading = false;
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Reload Complete"));
 }
 
 bool UWeaponStaticMeshComponent::AttachWeapon(AMyCharacter* TargetCharacter)
@@ -130,22 +172,6 @@ bool UWeaponStaticMeshComponent::AttachWeapon(AMyCharacter* TargetCharacter)
 
 	return true;
 }
-
-void UWeaponStaticMeshComponent::StartFiring()
-{
-	if (bIsFiring) return; // 발사 중 중복 발사 금지
-	bIsFiring = true;
-	Fire();
-	GetWorld()->GetTimerManager().SetTimer(FireTimerHandle, this, &UWeaponStaticMeshComponent::Fire, FireRate, true); // 발사 타이머 설정
-}
-
-// 발사 중지 함수
-void UWeaponStaticMeshComponent::StopFiring()
-{
-	bIsFiring = false;
-	GetWorld()->GetTimerManager().ClearTimer(FireTimerHandle);
-}
-
 
 void UWeaponStaticMeshComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {

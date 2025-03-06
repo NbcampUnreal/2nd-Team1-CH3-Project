@@ -2,6 +2,8 @@
 
 #include "CoreMinimal.h"
 #include "Components/StaticMeshComponent.h"
+#include "NiagaraSystem.h"
+#include "NiagaraFunctionLibrary.h"
 #include "WeaponStaticMeshComponent.generated.h"
 
 class AMyCharacter;
@@ -19,7 +21,7 @@ public:
 	USoundBase* FireSound;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-	UAnimMontage* FireAnimation;
+	UNiagaraSystem* FireAnimation;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 	FVector MuzzleOffset;
@@ -43,11 +45,12 @@ public:
 	void StartFiring();
 	void StopFiring();
 	void Reload();
+	void CompleteReload();
 
 protected:
 	UFUNCTION()
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
-
+	UPROPERTY(BlueprintReadOnly, Category = "Weapon")
 	int32 CurrentAmmo;
 	int32 MaxAmmo;
 
@@ -55,6 +58,11 @@ private:
 	AMyCharacter* Character;
 
 	FTimerHandle FireTimerHandle;
+	FTimerHandle ReloadTimerHandle;
+
+	float ReloadTime;
+	bool bIsReloading;
+
 	float FireRate;
 	bool bIsFiring;
 };

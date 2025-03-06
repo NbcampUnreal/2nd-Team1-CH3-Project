@@ -126,16 +126,6 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 					&AMyCharacter::StopSprint
 				);
 			}
-			//Reload
-			//if (PlayerController->ReloadAction)
-			//{
-			//	EnhancedInput->BindAction(
-			//		PlayerController->ReloadAction,
-			//		ETriggerEvent::Triggered,
-			//		this,
-			//		&AMyCharacter::ReloadWeapon
-			//	);
-			//}
 		}
 	}
 }
@@ -212,11 +202,3 @@ void AMyCharacter::StopSprint(const FInputActionValue& value)
 		GetCharacterMovement()->MaxWalkSpeed = NormalSpeed;
 	}
 }
-
-//void AMyCharacter::ReloadWeapon()
-//{
-//	if ()
-//	{
-//		Reload(); // 재장전 호출
-//	}
-//}
