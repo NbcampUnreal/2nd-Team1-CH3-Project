@@ -16,14 +16,10 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GameData")
 	int32 TotalScore;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GameData")
-	int32 ZombieKillCount;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GameData")
-	int32 SoldierKillCount;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GameData")
 	int32 TotalKillCount;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GameData")
 	int32 CurrentLevelIndex;
 
 	void AddToScore(int32 Amount);
-	void AddToKillCount(FString EnemyType);
+	void AddToKillCount();
 };
