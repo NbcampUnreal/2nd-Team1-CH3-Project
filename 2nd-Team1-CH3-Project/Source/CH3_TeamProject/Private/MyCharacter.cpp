@@ -6,6 +6,8 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "HealthComponent.h"
+#include "MyGameStateBase.h"
 
 AMyCharacter::AMyCharacter()
 {
@@ -33,6 +35,8 @@ AMyCharacter::AMyCharacter()
 
 	GetCharacterMovement()->MaxWalkSpeed = NormalSpeed;
 	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
+
+	HealthComp = CreateDefaultSubobject<UHealthComponent>(TEXT("Health"));
 }
 
 void AMyCharacter::BeginPlay()
@@ -126,6 +130,16 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 					&AMyCharacter::StopSprint
 				);
 			}
+			//Reload
+			//if (PlayerController->ReloadAction)
+			//{
+			//	EnhancedInput->BindAction(
+			//		PlayerController->ReloadAction,
+			//		ETriggerEvent::Triggered,
+			//		this,
+			//		&AMyCharacter::ReloadWeapon
+			//	);
+			//}
 		}
 	}
 }
@@ -202,3 +216,31 @@ void AMyCharacter::StopSprint(const FInputActionValue& value)
 		GetCharacterMovement()->MaxWalkSpeed = NormalSpeed;
 	}
 }
+
+float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventinInstigator, AActor* DamageCauser)
+{
+	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventinInstigator, DamageCauser);
+	HealthComp->TakeDamage(DamageAmount, DamageEvent, EventinInstigator, DamageCauser);
+	if (0 >= HealthComp->GetHealth())
+	{
+		Dead();
+	}
+	return Damage;
+}
+
+void AMyCharacter::Dead()
+{
+	if (AMyGameStateBase* MyGameState = GetWorld()->GetGameState<AMyGameStateBase>())
+	{
+		MyGameState->OnGameOver();
+		MyGameState->bIsGameOver = true;
+	}
+}
+
+//void AMyCharacter::ReloadWeapon()
+//{
+//	if ()
+//	{
+//		Reload(); // 재장전 호출
+//	}
+//}

@@ -5,6 +5,7 @@
 #include "Engine/World.h"
 #include "GameFramework/Actor.h"
 #include "TimerManager.h"
+#include "MyGameStateBase.h"
 
 // Sets default values
 ASpawnVolume::ASpawnVolume()
@@ -20,7 +21,6 @@ ASpawnVolume::ASpawnVolume()
 void ASpawnVolume::BeginPlay()
 {
     Super::BeginPlay();
-    SpawnEnemies();
 }
 
 
@@ -53,11 +53,16 @@ void ASpawnVolume::SpawnEnemies()
     for (int i = 0; i < EnemyCount; i++)
     {
         SpawnEnemy();
+		if (AMyGameStateBase* MyGameState = GetWorld()->GetGameState<AMyGameStateBase>())
+		{
+			MyGameState->SpawnedEnemyCount++;
+		}
     }
 
     if (WaveCount > 0)
     {
         WaveCount--;
+        EnemyCount++;
         GetWorldTimerManager().SetTimer(
             WaveTimerHandle,
             this,
