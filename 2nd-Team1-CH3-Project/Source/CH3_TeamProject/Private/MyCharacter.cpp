@@ -233,6 +233,7 @@ void AMyCharacter::Dead()
 	if (AMyGameStateBase* MyGameState = GetWorld()->GetGameState<AMyGameStateBase>())
 	{
 		MyGameState->OnGameOver();
+		MyGameState->bIsGameOver = true;
 	}
 }
 

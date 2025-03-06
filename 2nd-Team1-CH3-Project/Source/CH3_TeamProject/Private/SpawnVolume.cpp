@@ -62,6 +62,7 @@ void ASpawnVolume::SpawnEnemies()
     if (WaveCount > 0)
     {
         WaveCount--;
+        EnemyCount++;
         GetWorldTimerManager().SetTimer(
             WaveTimerHandle,
             this,

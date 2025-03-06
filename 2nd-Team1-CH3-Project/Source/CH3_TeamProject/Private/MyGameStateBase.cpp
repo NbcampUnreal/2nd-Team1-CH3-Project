@@ -136,7 +136,7 @@ void AMyGameStateBase::EndLevel()
 		}
 	}
 
-	if (CurrentLevelIndex >= MaxLevelIndex)
+	if (CurrentLevelIndex > MaxLevelIndex)
 	{
 		OnGameOver();
 		return;
