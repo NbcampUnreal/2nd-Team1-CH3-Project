@@ -53,6 +53,19 @@ void AEnemyCharacter::Dead()
 	{
 		AIController->UnPossess();
 	}
+
+	GetWorldTimerManager().SetTimer(
+		DestroyTimerHandle,
+		this,
+		&AEnemyCharacter::RemoveBody,
+		10.0f,
+		false
+	);
+}
+
+void AEnemyCharacter::RemoveBody()
+{
+	Destroy();
 }
 
 void AEnemyCharacter::EnableHandCollider()

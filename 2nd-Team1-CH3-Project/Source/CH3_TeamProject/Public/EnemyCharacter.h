@@ -22,7 +22,11 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
 	USphereComponent* HandCollider;
 
+	FTimerHandle DestroyTimerHandle;
+
 	void Dead();
+
+	void RemoveBody();
 
 public:
 	AEnemyCharacter();
