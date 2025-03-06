@@ -219,6 +219,8 @@ void AMyCharacter::StopSprint(const FInputActionValue& value)
 
 float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventinInstigator, AActor* DamageCauser)
 {
+	UE_LOG(LogTemp, Warning, (TEXT("TakeDamage")));
+
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventinInstigator, DamageCauser);
 	HealthComp->TakeDamage(DamageAmount, DamageEvent, EventinInstigator, DamageCauser);
 	if (0 >= HealthComp->GetHealth())
@@ -233,7 +235,6 @@ void AMyCharacter::Dead()
 	if (AMyGameStateBase* MyGameState = GetWorld()->GetGameState<AMyGameStateBase>())
 	{
 		MyGameState->OnGameOver();
-		MyGameState->bIsGameOver = true;
 	}
 }
 

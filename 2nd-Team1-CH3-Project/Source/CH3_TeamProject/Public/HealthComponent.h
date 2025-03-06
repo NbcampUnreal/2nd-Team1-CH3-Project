@@ -23,7 +23,9 @@ protected:
 
 public:	
 	float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventinInstigator, AActor* DamageCauser);
+	UFUNCTION(BlueprintCallable, Category = "Health")
 	float GetHealth();
+	UFUNCTION(BlueprintCallable, Category = "Health")
 	float GetMaxHealth();
 	void InitializeHealth(float health, float maxHealth);
 	void SetHealth(float health, float maxHealth = -1);

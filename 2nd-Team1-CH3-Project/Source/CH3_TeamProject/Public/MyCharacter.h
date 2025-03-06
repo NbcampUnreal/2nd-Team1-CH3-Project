@@ -62,7 +62,6 @@ protected:
 
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 		AController* EventinInstigator, AActor* DamageCauser) override;
-
 	void Dead();
 
 public:	

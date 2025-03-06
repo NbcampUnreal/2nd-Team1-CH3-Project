@@ -11,6 +11,7 @@
 #include "HealthComponent.h"
 #include "MyCharacter.h"
 #include "PatrolPath.h"
+#include "MyGameStateBase.h"
 
 // Sets default values
 AEnemyCharacter::AEnemyCharacter()
@@ -47,6 +48,11 @@ void AEnemyCharacter::Dead()
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	HandCollider->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	HeadCollider->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	if (AMyGameStateBase* MyGameState = GetWorld()->GetGameState<AMyGameStateBase>())
+	{
+		MyGameState->OnEnemyDead();
+	}
 
 	// AI 컨트롤러 비활성화
 	AAIController* AIController = Cast<AAIController>(GetController());
@@ -88,12 +94,13 @@ void AEnemyCharacter::OnHandOverlap(
 	bool bFromSweep,
 	const FHitResult& SweepResult)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Hit"));
+	
 	if (OtherActor && OtherActor != this)
 	{
 		ACharacter* Player = Cast<ACharacter>(OtherActor);
 		if (Player && Player->IsA(AMyCharacter::StaticClass()) && !IsPlayerHit)
 		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Hit"));
 			IsPlayerHit = true;
 			UGameplayStatics::ApplyDamage(Player, 20.0f, GetController(), this, UDamageType::StaticClass());
 		}
