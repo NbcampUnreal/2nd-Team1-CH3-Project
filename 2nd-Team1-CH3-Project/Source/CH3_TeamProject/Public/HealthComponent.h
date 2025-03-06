@@ -16,9 +16,9 @@ public:
 	UHealthComponent();
 
 protected:
-	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Enemy")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
 	float MaxHealth;
-	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Enemy")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
 	float Health;
 
 public:	

@@ -7,6 +7,7 @@
 #include "EnemyCharacter.generated.h"
 
 class UHealthComponent;
+class USphereComponent;
 
 UCLASS()
 class CH3_TEAMPROJECT_API AEnemyCharacter : public ACharacter
@@ -14,17 +15,33 @@ class CH3_TEAMPROJECT_API AEnemyCharacter : public ACharacter
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Enemy")
-	float MaxHealth;
-	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Enemy")
-	float Health;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
 	UHealthComponent* HealthComp;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
+	USphereComponent* HeadCollider;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
+	USphereComponent* HandCollider;
 
 	void Dead();
 
 public:
 	AEnemyCharacter();
+
+	UFUNCTION(BlueprintCallable, Category = "HandCollider")
+	void EnableHandCollider();
+	UFUNCTION(BlueprintCallable, Category = "HandCollider")
+	void DisableHandCollider();
+
+	bool IsPlayerHit;
+
+	UFUNCTION()
+	void OnHandOverlap(
+		UPrimitiveComponent* OverlappedComponent,
+		AActor* OtherActor,
+		UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex,
+		bool bFromSweep,
+		const FHitResult& SweepResult);
 
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, 
 		AController* EventinInstigator, AActor* DamageCauser) override;

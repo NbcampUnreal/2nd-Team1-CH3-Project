@@ -5,15 +5,27 @@
 #include "EnemyAIController.h"
 #include "Engine/GameEngine.h"
 #include "Engine/DamageEvents.h"
+#include "Components/SphereComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "HealthComponent.h"
+#include "MyCharacter.h"
 
 // Sets default values
 AEnemyCharacter::AEnemyCharacter()
 {
 	AIControllerClass = AEnemyAIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
-	HealthComp = CreateDefaultSubobject<UHealthComponent>(TEXT("SpringArm"));
-	
+	HealthComp = CreateDefaultSubobject<UHealthComponent>(TEXT("Health"));
+
+	HeadCollider = CreateDefaultSubobject<USphereComponent>(TEXT("HeadCollider"));
+	HeadCollider->SetupAttachment(GetMesh(), FName("head"));
+
+	HandCollider = CreateDefaultSubobject<USphereComponent>(TEXT("HandCollider"));
+	HandCollider->SetupAttachment(GetMesh(), FName("righthand"));
+	HandCollider->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	HandCollider->OnComponentBeginOverlap.AddDynamic(this, &AEnemyCharacter::OnHandOverlap);
 }
 
 float AEnemyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventinInstigator, AActor* DamageCauser)
@@ -29,5 +41,47 @@ float AEnemyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 
 void AEnemyCharacter::Dead()
 {
-	Destroy();
+	GetMesh()->SetSimulatePhysics(true);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	HandCollider->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	HeadCollider->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	// AI 컨트롤러 비활성화
+	AAIController* AIController = Cast<AAIController>(GetController());
+	if (AIController)
+	{
+		AIController->UnPossess();
+	}
+}
+
+void AEnemyCharacter::EnableHandCollider()
+{
+	HandCollider->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	IsPlayerHit = false;
+}
+
+void AEnemyCharacter::DisableHandCollider()
+{
+	HandCollider->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+}
+
+void AEnemyCharacter::OnHandOverlap(
+	UPrimitiveComponent* OverlappedComponent,
+	AActor* OtherActor,
+	UPrimitiveComponent* OtherComp,
+	int32 OtherBodyIndex,
+	bool bFromSweep,
+	const FHitResult& SweepResult)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Hit"));
+	if (OtherActor && OtherActor != this)
+	{
+		ACharacter* Player = Cast<ACharacter>(OtherActor);
+		if (Player && Player->IsA(AMyCharacter::StaticClass()) && !IsPlayerHit)
+		{
+			IsPlayerHit = true;
+			UGameplayStatics::ApplyDamage(Player, 20.0f, GetController(), this, UDamageType::StaticClass());
+		}
+	}
 }
