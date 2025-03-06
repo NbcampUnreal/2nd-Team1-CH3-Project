@@ -10,6 +10,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "HealthComponent.h"
 #include "MyCharacter.h"
+#include "PatrolPath.h"
 
 // Sets default values
 AEnemyCharacter::AEnemyCharacter()
@@ -97,4 +98,9 @@ void AEnemyCharacter::OnHandOverlap(
 			UGameplayStatics::ApplyDamage(Player, 20.0f, GetController(), this, UDamageType::StaticClass());
 		}
 	}
+}
+
+APatrolPath* AEnemyCharacter::GetPatrolPath()
+{
+	return PatrolPath;
 }

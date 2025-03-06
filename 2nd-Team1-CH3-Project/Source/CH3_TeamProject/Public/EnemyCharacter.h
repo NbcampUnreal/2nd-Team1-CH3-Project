@@ -8,7 +8,7 @@
 
 class UHealthComponent;
 class USphereComponent;
-
+class APatrolPath;
 UCLASS()
 class CH3_TEAMPROJECT_API AEnemyCharacter : public ACharacter
 {
@@ -21,6 +21,9 @@ protected:
 	USphereComponent* HeadCollider;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
 	USphereComponent* HandCollider;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Patrol")
+	APatrolPath* PatrolPath;
+
 
 	FTimerHandle DestroyTimerHandle;
 
@@ -37,6 +40,8 @@ public:
 	void DisableHandCollider();
 
 	bool IsPlayerHit;
+
+	APatrolPath* GetPatrolPath();
 
 	UFUNCTION()
 	void OnHandOverlap(
