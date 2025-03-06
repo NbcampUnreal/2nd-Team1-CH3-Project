@@ -7,6 +7,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "HealthComponent.h"
+#include "MyGameStateBase.h"
 
 AMyCharacter::AMyCharacter()
 {
@@ -213,6 +214,25 @@ void AMyCharacter::StopSprint(const FInputActionValue& value)
 	if (GetCharacterMovement())
 	{
 		GetCharacterMovement()->MaxWalkSpeed = NormalSpeed;
+	}
+}
+
+float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventinInstigator, AActor* DamageCauser)
+{
+	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventinInstigator, DamageCauser);
+	HealthComp->TakeDamage(DamageAmount, DamageEvent, EventinInstigator, DamageCauser);
+	if (0 >= HealthComp->GetHealth())
+	{
+		Dead();
+	}
+	return Damage;
+}
+
+void AMyCharacter::Dead()
+{
+	if (AMyGameStateBase* MyGameState = GetWorld()->GetGameState<AMyGameStateBase>())
+	{
+		MyGameState->OnGameOver();
 	}
 }
 

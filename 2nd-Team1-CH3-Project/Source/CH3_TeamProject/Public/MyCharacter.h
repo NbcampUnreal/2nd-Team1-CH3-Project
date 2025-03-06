@@ -60,6 +60,11 @@ protected:
 	UFUNCTION()
 	void StopSprint(const FInputActionValue& value);
 
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
+		AController* EventinInstigator, AActor* DamageCauser) override;
+
+	void Dead();
+
 public:	
 	virtual void Tick(float DeltaTime) override;
 
