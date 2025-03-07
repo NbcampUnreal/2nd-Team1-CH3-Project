@@ -7,3 +7,4 @@ WeaponStaticMesh 디테일 설정 우측처럼 설정한 뒤
 BP_FPS의 BP_Static_PickUp_Weapon 배치 후 플레이, 총 위로 간다면 장착됩니다.
 
 https://youtu.be/tfYoufmM4P8
+[NBC_CH3_1조 발표자료.pdf](https://github.com/user-attachments/files/19117891/NBC_CH3_1.pdf)
