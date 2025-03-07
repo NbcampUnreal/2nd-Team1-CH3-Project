@@ -124,6 +124,8 @@ void AMyGameStateBase::StartLevel()
 
 void AMyGameStateBase::EndLevel()
 {
+	UpdateMainMenu();
+
 	if (UGameInstance* GameInstance = GetGameInstance())
 	{
 		UMyGameInstance* MyGameInstance = Cast<UMyGameInstance>(GameInstance);
